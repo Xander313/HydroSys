@@ -1,8 +1,22 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/baseSesionIniciada.html' %}
+{% load static%}
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block linksCss %}
+<link rel="stylesheet" href="{% static 'pwa/css/menuCentral.css' %}">
+{% endblock %}
+
+{% block title %}Menú central{% endblock %}
 {% block seccion %}Menú{% endblock %}
 
 {% block content %}
-<h1>estamos en el menu</h1>
+<div class="contenidoCentral">
+    <h3>Bienvenido {{name}}</h3>
+    <div class="elementosMenuCentral">
+        <a href="">Notificaciones</a>
+        <a href="">Configuraciones</a>
+        <a href="">Estaditicas</a>
+        <a href="">Otras opciones</a>
+    </div>
+</div>
+
 {% endblock %}
