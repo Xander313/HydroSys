@@ -26,7 +26,6 @@ urlpatterns = [
     path('limiteUsuario/', include('Aplicaciones.LimiteUsuario.urls')),
     path('notificaciones/', include('Aplicaciones.Usuario.urls')),
     path('sensores/', include('Aplicaciones.Notificaciones.urls')),
-    path('tiempoEnvio/', include('Aplicaciones.TiempoEnvio.urls')),
 
 
 

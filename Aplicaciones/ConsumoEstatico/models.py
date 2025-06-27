@@ -1,11 +1,10 @@
 from django.db import models
-from Aplicaciones.Usuario.models import Usuario 
-
+from Aplicaciones.UsuarioSensor.models import UsuarioSensor
 
 class ConsumoEstatico(models.Model):
     consumoEstatico = models.FloatField()
-    fechaCorte = models.DateTimeField()
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    fechaCorte = models.DateTimeField(auto_now_add=True)
+    usuarioSensor = models.ForeignKey(UsuarioSensor, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.usuario} - {self.consumoEstatico} L (Corte: {self.fechaCorte.strftime('%Y-%m-%d')})"
+        return f"{self.usuarioSensor} - {self.consumoEstatico} L - {self.fechaCorte.date()}"

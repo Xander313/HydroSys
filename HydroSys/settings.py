@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'Aplicaciones.ConsumoEstatico',
     'Aplicaciones.ConsumoHistorico',
     'Aplicaciones.LimiteUsuario',
-    'Aplicaciones.TiempoEnvio',
     'Aplicaciones.TipoMensaje',
     'Aplicaciones.Notificaciones',
     'Aplicaciones.LogsUsuario',

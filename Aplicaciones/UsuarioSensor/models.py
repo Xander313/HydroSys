@@ -8,8 +8,13 @@ class UsuarioSensor(models.Model):
     ubicacionSensor = models.CharField(max_length=100)
     fechaAsignacion = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.usuario.nombreUsuario} - {self.sensor.nombreSensor} ({self.ubicacionSensor})"
+    class Meta:
+        unique_together = ('usuario', 'sensor', 'ubicacionSensor')
+
+
+    class Meta:
+        unique_together = ('usuario', 'sensor', 'ubicacionSensor')
+
     
     class Meta:
         unique_together = ('usuario', 'sensor', 'ubicacionSensor')

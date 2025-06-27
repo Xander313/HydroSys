@@ -9,7 +9,7 @@ from Aplicaciones.consumoDinamico.models import ConsumoDinamico
 
 
 def guardar_consumo(sensor_id, consumo):
-    usuario_sensor = UsuarioSensor.objects.filter(sensor__sensor_id=sensor_id).first()
+    usuario_sensor = UsuarioSensor.objects.filter(sensor__sensorID=sensor_id).first()
     if not usuario_sensor:
         raise ValueError("UsuarioSensor no encontrado")
     consumo_obj = ConsumoDinamico.objects.create(
