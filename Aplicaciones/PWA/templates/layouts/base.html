@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}HydroSys{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'pwa/css/main.css' %}">
+</head>
+<body>
+    <header>
+        <h1>HydroSys</h1>
+    </header>
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+</body>
+</html>

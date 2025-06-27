@@ -4,6 +4,10 @@ import json
 from Aplicaciones.UsuarioSensor.models import UsuarioSensor
 from Aplicaciones.consumoDinamico.models import ConsumoDinamico
 
+#python manage.py calcular_consumo_diario
+#0 0 * * * /ruta/a/tu/entorno/bin/python /ruta/a/tu/proyecto/manage.py calcular_consumo_diario
+
+
 def guardar_consumo(sensor_id, consumo):
     usuario_sensor = UsuarioSensor.objects.filter(sensor__sensor_id=sensor_id).first()
     if not usuario_sensor:
