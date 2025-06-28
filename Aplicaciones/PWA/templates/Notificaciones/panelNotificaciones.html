@@ -1,0 +1,102 @@
+
+
+{% extends 'layouts/baseSesionIniciada.html' %}
+{% load static %}
+
+{% block title %}Mis Notificaciones{% endblock %}
+
+{% block seccion %}Mis Notificaciones{% endblock %}
+
+
+{% block linksCss %}
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="sensor-selector" style="margin-bottom: 20px;">
+    <h3>📡 Selecciona un sensor:</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        {% for sensor in sensores %}
+            <button 
+                onclick="seleccionarSensor('{{ sensor.id }}')" 
+                style="padding: 10px 20px; border: none; background-color: #3498db; color: white; border-radius: 8px; cursor: pointer;">
+                Sensor {{ sensor.sensor.nombreSensor }} - {{ sensor.ubicacionSensor }}
+            </button>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="notificaciones-contenedor">
+    <p>🔔 Aquí se mostrarán las notificaciones del sensor seleccionado.</p>
+</div>
+
+
+
+<script>
+    const urlNotificacionesBase = "{% url 'obtener_notificaciones_sensor' 0 %}";
+    let sensorSeleccionado = null;
+    let intervalo = null;
+
+    function seleccionarSensor(sensorId) {
+        sensorSeleccionado = sensorId;
+        mostrarNotificaciones(sensorId);
+
+        if (intervalo) clearInterval(intervalo);  // Evita múltiples intervalos
+        intervalo = setInterval(() => {
+            if (sensorSeleccionado) {
+                mostrarNotificaciones(sensorSeleccionado);
+            }
+        }, 60000); // cada 15 segundos
+    }
+
+    function mostrarNotificaciones(sensorId) {
+        const url = urlNotificacionesBase.replace('0', sensorId);
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const contenedor = document.getElementById("notificaciones-contenedor");
+                contenedor.innerHTML = ""; // Limpia anteriores
+
+                if (data.notificaciones.length === 0) {
+                    contenedor.innerHTML = "<p>No hay notificaciones para este sensor.</p>";
+                    return;
+                }
+
+                const lista = document.createElement("ul");
+                lista.style.listStyle = "none";
+                lista.style.padding = "0";
+
+                data.notificaciones.forEach(noti => {
+                    const item = document.createElement("li");
+                    item.style.marginBottom = "10px";
+                    let color = "gray";
+
+                    if (noti.tipo === "Alerta Azul") color = "#3498db";
+                    else if (noti.tipo === "Alerta Naranja") color = "#e67e22";
+                    else if (noti.tipo === "Alerta Roja") color = "#e74c3c";
+
+                    item.innerHTML = `
+                        <div style="border-left: 5px solid ${color}; padding: 10px; background: #f4f4f4; border-radius: 5px;">
+                            <strong>${noti.tipo}</strong><br>
+                            ${noti.mensaje}<br>
+                            <small>${noti.fechaEnvio}</small>
+                        </div>
+                    `;
+                    lista.appendChild(item);
+                });
+
+                contenedor.appendChild(lista);
+            })
+            .catch(error => {
+                console.error("❌ Error al obtener notificaciones:", error);
+            });
+    }
+</script>
+
+
+
+
+{% endblock %}
