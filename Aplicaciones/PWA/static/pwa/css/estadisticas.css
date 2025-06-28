@@ -1,0 +1,79 @@
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+.sensoresEcnontrados{
+    width: 100%;
+    text-align: center;
+}
+
+
+.botonesAcciones{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.botonesAcciones a{
+    font-size: 2rem;
+    color: aqua;
+}
+
+.misSensores{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 5px solid aqua;
+    border-radius: 15px;
+    padding: 10px 30px;
+    
+}
+
+
+.agregarNuevoSensor{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.divPrincipal{
+    overflow-y: auto;
+}
+
+.agregarNuevo{
+    display: flex;
+    justify-content: right;
+    border-radius: 10px;
+    text-decoration-line: none;
+    color: black;
+    width: 100%;
+    height: auto;
+
+}
+
+.agregarNuevo a{
+    padding: 10px;
+    border: 5px solid aqua;
+    border-radius: 10px;
+    text-decoration-line: none;
+    color: black;
+    width: auto;
+    height: auto;
+
+}
+
+.contenedorSensores{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+

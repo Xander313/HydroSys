@@ -9,6 +9,16 @@ urlpatterns = [
     path('notificaciones/sensor/<int:id>/', views.ver_notificaciones_por_usuario, name="ver_notificaciones_por_usuario"),
 
 
-    path('estadisticaPresenracion/', views.ver_notificaciones_por_usuario, name="ver_notificaciones_por_usuario"),
+
+
+
+    path('estadistica/<id>', views.estadisticaPresenracion, name="estadisticaPresenracion"),
+
+
+    path("reporte/consumo/<int:sensor_id>/", views.reporte_consumo_json, name="reporte_consumo_json"),
+
+    path("reporte/consumo/pie/<int:sensor_id>/", views.reporte_consumo_pie, name="reporte_consumo_pie"),
+
+
 
 ]

@@ -1,12 +1,12 @@
-from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
 from Aplicaciones.Usuario.models import Usuario
-from Aplicaciones.UsuarioSensor.models import UsuarioSensor
 from django.http import JsonResponse
 from Aplicaciones.Notificaciones.models import Notificacion
-from django.core import serializers
 from django.utils.timezone import localtime
-# Create your views here.
+from Aplicaciones.ConsumoHistorico.models import ConsumoHistorico
+from Aplicaciones.UsuarioSensor.models import UsuarioSensor
+
+
 
 def ver_notificaciones_por_usuario(request, id):
     usuario = get_object_or_404(Usuario, pk=id)
@@ -16,7 +16,6 @@ def ver_notificaciones_por_usuario(request, id):
         'usuario': usuario,
         'sensores': sensores,
     })
-
 
 
 
@@ -35,31 +34,64 @@ def obtener_notificaciones_sensor(request, sensor_id):
     return JsonResponse({'notificaciones': data})
 
 
+def estadisticaPresenracion(request, id):
+    usuario = get_object_or_404(Usuario, pk=id)
+    sensores_asignados = UsuarioSensor.objects.filter(usuario=usuario)
+
+    sensores_con_config = []
+
+    for sensor in sensores_asignados:
+        sensores_con_config.append({
+            'id': sensor.id,
+            'sensor': sensor.sensor,
+            'ubicacionSensor': sensor.ubicacionSensor,
+        })
+
+    return render(request, 'estadisticas/estaditicaPrevio.html', {
+        'sensores': sensores_con_config,
+        'usuario_id': usuario.id,
+    })
 
 
 
-
-from django.shortcuts import render, get_object_or_404
-from Aplicaciones.ConsumoHistorico.models import ConsumoHistorico
-from Aplicaciones.UsuarioSensor.models import UsuarioSensor
-import json
-
-def reporte_consumo(request, usuario_id, sensor_id):
-    usuario_sensor = get_object_or_404(UsuarioSensor, usuario_id=usuario_id, id=sensor_id)
-
-    historico = ConsumoHistorico.objects.filter(
-        usuarioSensor=usuario_sensor
-    ).order_by('fechaPeriodo')
+def reporte_consumo_json(request, sensor_id):
+    historico = ConsumoHistorico.objects.filter(usuarioSensor_id=sensor_id).order_by('fechaPeriodo')
 
     datos = {
         "fechas": [h.fechaPeriodo.strftime('%d/%m') for h in historico],
         "consumo_total": [h.consumoTotal for h in historico],
         "maximo": [h.maxConsumo for h in historico],
-        "promedio": [h.minConsumo for h in historico],
+        "promedio": [h.minConsumo for h in historico], 
     }
 
-    return render(request, "reporte.html", {
-        "datos_json": json.dumps(datos),
-        "sensor": usuario_sensor.sensor.nombreSensor, 
-        "ubicacion": usuario_sensor.ubicacionSensor,   
+    return JsonResponse(datos)
+
+
+def reporte_consumo_pie(request, sensor_id):
+    historico = (
+        ConsumoHistorico.objects
+        .filter(usuarioSensor_id=sensor_id)
+        .order_by('-fechaPeriodo')[:7]
+    )
+
+    historico = list(historico)[::-1]
+
+    dias_en = [h.fechaPeriodo.strftime('%A') for h in historico]
+    
+    dias_traducidos = {
+        "Monday": "Lunes",
+        "Tuesday": "Martes",
+        "Wednesday": "Miércoles",
+        "Thursday": "Jueves",
+        "Friday": "Viernes",
+        "Saturday": "Sábado",
+        "Sunday": "Domingo"
+    }
+
+    dias_es = [dias_traducidos.get(dia, dia) for dia in dias_en]
+    consumos = [h.consumoTotal for h in historico]
+
+    return JsonResponse({
+        "dias": dias_es,
+        "consumos": consumos
     })
