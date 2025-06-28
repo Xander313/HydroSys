@@ -3,32 +3,36 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from Aplicaciones.UsuarioSensor.models import UsuarioSensor
 from Aplicaciones.consumoDinamico.models import ConsumoDinamico
-from Aplicaciones.Notificaciones.models import Notificacion
-from django.utils import timezone
-from datetime import timedelta
-from django.utils import timezone
-from django.db.models import Sum
 from Aplicaciones.LimiteUsuario.models import LimiteUsuario
-from Aplicaciones.ConsumoEstatico.models import ConsumoEstatico
 from Aplicaciones.Notificaciones.models import Notificacion
+from Aplicaciones.ConsumoEstatico.models import ConsumoEstatico
 from Aplicaciones.TipoMensaje.models import TipoMensaje
+from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Sum
 from django.utils.timezone import localtime
+from datetime import date
+from django.utils.timezone import now
+from datetime import timezone as dt_timezone
+
+
+from datetime import datetime, time
+from django.db.models import Sum
+from django.utils.timezone import localtime, make_aware, localdate
+from datetime import datetime, timedelta
+from Aplicaciones.UsuarioSensor.models import UsuarioSensor
+from datetime import datetime, time, timezone as dt_timezone
+from django.utils import timezone
+
+from datetime import datetime, time, timedelta, timezone as dt_timezone
+from django.utils import timezone
+
 
 #python manage.py calcular_consumo_diario
 #0 0 * * * /ruta/a/tu/entorno/bin/python /ruta/a/tu/proyecto/manage.py calcular_consumo_diario
 
-from django.db.models import Sum
-from datetime import date
-from django.utils.timezone import now
-from Aplicaciones.UsuarioSensor.models import UsuarioSensor
-from Aplicaciones.LimiteUsuario.models import LimiteUsuario
-from Aplicaciones.Notificaciones.models import Notificacion
 
-from django.utils.timezone import localtime
-
-
-def construir_mensaje_consumo(nombre, consumo_estatico, consumo_dinamico, consumo_total, umbral, limite_diario):
+def construir_mensaje_consumo(consumo_diario, nombre, consumo_estatico, consumo_dinamico, consumo_total, umbral, limite_diario):
     fecha_envio = localtime().strftime("%d/%m/%Y %H:%M")
     restante = (umbral - consumo_dinamico) / 1000
 
@@ -40,7 +44,7 @@ def construir_mensaje_consumo(nombre, consumo_estatico, consumo_dinamico, consum
         f"<b>ℹ️ Consumo disponible:</b> {restante:.2f} m³<br><br>"
 
         f"🔵Aún no supera su <b>límite diario</b> de consumo.<br><br>"
-        f"<b>Consumo de hoy:</b> {consumo_dinamico:.2f} L<br>"
+        f"<b>Consumo de hoy:</b> {consumo_diario:.2f} L<br>"
         f"<b>Límite diario establecido:</b> {limite_diario:.2f} L<br><br>"
 
 
@@ -49,7 +53,8 @@ def construir_mensaje_consumo(nombre, consumo_estatico, consumo_dinamico, consum
 
 
 
-def construir_mensaje_alerta_roja(nombre, consumo_estatico, consumo_dinamico, consumo_total, umbral, limite_diario):
+def construir_mensaje_alerta_roja(nombre, consumo_estatico, consumo_dinamico, consumo_total, umbral, limite_diario, consumo_diario):
+
     exceso = consumo_dinamico - umbral
     multa = exceso / 1000
     fecha_envio = localtime().strftime("%d/%m/%Y %H:%M")
@@ -73,13 +78,13 @@ def construir_mensaje_alerta_roja(nombre, consumo_estatico, consumo_dinamico, co
     if consumo_dinamico > limite_diario:
         mensaje += (
             f"🟠 También has superado tu <b>límite diario</b> de consumo.<br><br>"
-            f"<b>Consumo de hoy:</b> {consumo_dinamico:.2f} L<br>"
+            f"<b>Consumo de hoy:</b> {consumo_diario:.2f} L<br>"
             f"<b>Límite diario establecido:</b> {limite_diario:.2f} L<br><br>"
         )
     else:
         mensaje += (
             f"🔵 Aún no supera su <b>límite diario</b> de consumo.<br><br>"
-            f"<b>Consumo de hoy:</b> {consumo_dinamico:.2f} L<br>"
+            f"<b>Consumo de hoy:</b> {consumo_diario:.2f} L<br>"
             f"<b>Límite diario establecido:</b> {limite_diario:.2f} L<br><br>"
         )
 
@@ -88,8 +93,7 @@ def construir_mensaje_alerta_roja(nombre, consumo_estatico, consumo_dinamico, co
 
 
 
-def construir_mensaje_alerta_naranja(nombre, consumo_estatico, consumo_dinamico, consumo_total, umbral, limite_diario):
-    fecha_envio = localtime().strftime("%d/%m/%Y %H:%M")
+def construir_mensaje_alerta_naranja(consumo_diario, nombre, consumo_estatico, consumo_dinamico, consumo_total, umbral, limite_diario):
     restante = (umbral - consumo_dinamico) / 1000
     return (
 
@@ -101,7 +105,7 @@ def construir_mensaje_alerta_naranja(nombre, consumo_estatico, consumo_dinamico,
         f"<b>ℹ️ Consumo disponible:</b> {restante:.2f} m³<br><br>"
 
         f"🟠 Has superado tu <b>límite diario</b> de consumo.<br><br>"
-        f"<b>Consumo de hoy:</b> {consumo_dinamico:.2f} L<br>"
+        f"<b>Consumo de hoy:</b> {consumo_diario:.2f} L<br>"
         f"<b>Límite diario establecido:</b> {limite_diario:.2f} L<br><br>"
     )
 
@@ -122,74 +126,87 @@ def enviar_notificacion(usuario_sensor, mensaje, nombre_tipo):
 
 
 
+def enviar_notificacion(usuario_sensor, mensaje, nombre_tipo):
+    try:
+        tipo = TipoMensaje.objects.get(tipoAlerta__iexact=nombre_tipo.strip())
+        Notificacion.objects.create(
+            usuarioSensor=usuario_sensor,
+            mensaje=mensaje,
+            tipoMensaje=tipo
+        )
+        print(f"✅ Notificación enviada: {mensaje}")
+    except TipoMensaje.DoesNotExist:
+        print(f"❌ Tipo de mensaje '{nombre_tipo}' no existe.")
 
 def guardar_consumo(sensor_id, consumo):
     usuario_sensor = UsuarioSensor.objects.filter(sensor__sensorID=sensor_id).first()
     if not usuario_sensor:
         raise ValueError("UsuarioSensor no encontrado")
     
-    # Guardar consumo dinámico
     consumo_obj = ConsumoDinamico.objects.create(
         consumoDinamico=consumo,
         usuarioSensor=usuario_sensor
     )
-    
-    # Obtener configuración de tiempoEnvio para este sensor (en minutos)
+
     limite = LimiteUsuario.objects.filter(usuarioSensor=usuario_sensor).order_by('-fechaCambio').first()
-    if not limite:
-        # Configuración por defecto, si no hay límite configurado
-        tiempo_envio = 3
-        limite_diario = 0
-        umbral = 3000  # ejemplo umbral mensual en litros
-    else:
-        tiempo_envio = limite.tiempoMinutos
-        limite_diario = limite.limiteDiario
-        umbral = limite.umbralAlerta
+    tiempo_envio = limite.tiempoMinutos if limite else 3
+    limite_diario = limite.limiteDiario if limite else 0
+    umbral = limite.umbralAlerta if limite else 3000  # por defecto 3000 L
 
-    ahora = localtime() 
+    ahora = timezone.now()
 
-    inicio_dia = ahora.replace(hour=0, minute=0, second=0, microsecond=0)
-    
-    # Obtener última notificación enviada para este sensor (de cualquier tipo)
+    inicio_dia = datetime.combine(ahora.date(), time.min).replace(tzinfo=dt_timezone.utc)
+    fin_dia = datetime.combine(ahora.date(), time.max).replace(tzinfo=dt_timezone.utc)
+
+    inicio_mes = datetime.combine(ahora.replace(day=1).date(), time.min).replace(tzinfo=dt_timezone.utc)
+    fin_mes = datetime.combine(
+        (ahora.replace(day=1) + timedelta(days=31)).date(), time.max
+    ).replace(tzinfo=dt_timezone.utc)  # opcional para el fin de mes
+
     ultima_notif = Notificacion.objects.filter(usuarioSensor=usuario_sensor).order_by('-fechaEnvio').first()
-    
-    # Verificar si ha pasado el tiempo suficiente para enviar nueva notificación
+
     if ultima_notif is None or (ahora - ultima_notif.fechaEnvio) >= timedelta(minutes=tiempo_envio):
-        
-        # Calcular consumo diario
-        inicio_dia = ahora.replace(hour=0, minute=0, second=0, microsecond=0)
         consumo_diario = ConsumoDinamico.objects.filter(
             usuarioSensor=usuario_sensor,
-            fechaCorte__gte=inicio_dia
+            fechaCorte__gte=inicio_dia,
+            fechaCorte__lt=fin_dia,
+            consumoDinamico__gt=0
         ).aggregate(total=Sum('consumoDinamico'))['total'] or 0
 
-        # Calcular consumo mensual
-        inicio_mes = ahora.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            
         consumo_dinamico_mes = ConsumoDinamico.objects.filter(
             usuarioSensor=usuario_sensor,
-            fechaCorte__gte=inicio_mes
+            fechaCorte__gte=inicio_mes,
+            fechaCorte__lte=ahora
         ).aggregate(total=Sum('consumoDinamico'))['total'] or 0
 
-        # Obtener consumo estático
-        consumo_estatico = ConsumoEstatico.objects.filter(usuarioSensor=usuario_sensor).order_by('-fechaCorte').first()
+        consumo_estatico = ConsumoEstatico.objects.filter(
+            usuarioSensor=usuario_sensor
+        ).order_by('-fechaCorte').first()
         valor_estatico = consumo_estatico.consumoEstatico if consumo_estatico else 0
 
-        # Total del mes
         consumo_total = valor_estatico + consumo_dinamico_mes
         nombre_usuario = usuario_sensor.usuario.nombreUsuario
 
-        # Construcción de mensajes según tipo de alerta
         if consumo_dinamico_mes > umbral:
-            mensaje_rojo = construir_mensaje_alerta_roja(nombre_usuario, valor_estatico, consumo_dinamico_mes, consumo_total, umbral, limite_diario)
+            mensaje_rojo = construir_mensaje_alerta_roja(
+                nombre_usuario, valor_estatico, consumo_dinamico_mes, consumo_total, umbral, limite_diario, consumo_diario
+            )
             enviar_notificacion(usuario_sensor, mensaje_rojo, "Alerta Roja")
 
         elif consumo_diario > limite_diario:
-            mensaje_naranja = construir_mensaje_alerta_naranja(nombre_usuario, valor_estatico, consumo_diario, consumo_total, umbral, limite_diario)
+            mensaje_naranja = construir_mensaje_alerta_naranja(
+                consumo_diario, nombre_usuario, valor_estatico, consumo_dinamico_mes, consumo_total, umbral, limite_diario
+            )
             enviar_notificacion(usuario_sensor, mensaje_naranja, "Alerta Naranja")
 
         else:
-            mensaje_azul = construir_mensaje_consumo(nombre_usuario, valor_estatico, consumo_dinamico_mes, consumo_total, umbral, limite_diario)
+            mensaje_azul = construir_mensaje_consumo(
+                consumo_diario, nombre_usuario, valor_estatico, consumo_dinamico_mes, consumo_total, umbral, limite_diario
+            )
             enviar_notificacion(usuario_sensor, mensaje_azul, "Alerta Azul")
+
+    return consumo_obj
 
 
 @csrf_exempt

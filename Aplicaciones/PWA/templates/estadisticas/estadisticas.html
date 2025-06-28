@@ -1,0 +1,60 @@
+{% extends 'layouts/baseSesionIniciada.html' %}
+{% load static%}
+
+{% block linksCss %}
+{% endblock %}
+
+{% block title %}Menú central{% endblock %}
+{% block seccion %}Menú{% endblock %}
+
+{% block content %}
+
+
+
+<canvas id="graficoConsumo" width="800" height="400"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const datos = {{ datos_json|safe }};
+
+    const ctx = document.getElementById('graficoConsumo').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: datos.fechas,  // ['27/06', '28/06', ...]
+            datasets: [
+                {
+                    label: 'Consumo Total (L)',
+                    data: datos.consumo_total,
+                    borderColor: 'blue',
+                    fill: false,
+                    tension: 0.1
+                },
+                {
+                    label: 'Máximo Consumo (L)',
+                    data: datos.maximo,
+                    borderColor: 'orange',
+                    fill: false,
+                    tension: 0.1
+                },
+                {
+                    label: 'Promedio (L)',
+                    data: datos.promedio,
+                    borderColor: 'green',
+                    fill: false,
+                    tension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Histórico de Consumo Diario'
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

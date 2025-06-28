@@ -33,3 +33,33 @@ def obtener_notificaciones_sensor(request, sensor_id):
     ]
     
     return JsonResponse({'notificaciones': data})
+
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from Aplicaciones.ConsumoHistorico.models import ConsumoHistorico
+from Aplicaciones.UsuarioSensor.models import UsuarioSensor
+import json
+
+def reporte_consumo(request, usuario_id, sensor_id):
+    usuario_sensor = get_object_or_404(UsuarioSensor, usuario_id=usuario_id, id=sensor_id)
+
+    historico = ConsumoHistorico.objects.filter(
+        usuarioSensor=usuario_sensor
+    ).order_by('fechaPeriodo')
+
+    datos = {
+        "fechas": [h.fechaPeriodo.strftime('%d/%m') for h in historico],
+        "consumo_total": [h.consumoTotal for h in historico],
+        "maximo": [h.maxConsumo for h in historico],
+        "promedio": [h.minConsumo for h in historico],
+    }
+
+    return render(request, "reporte.html", {
+        "datos_json": json.dumps(datos),
+        "sensor": usuario_sensor.sensor.nombreSensor, 
+        "ubicacion": usuario_sensor.ubicacionSensor,   
+    })

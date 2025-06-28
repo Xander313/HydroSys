@@ -7,4 +7,8 @@ urlpatterns = [
 
     # Luego las más generales
     path('notificaciones/sensor/<int:id>/', views.ver_notificaciones_por_usuario, name="ver_notificaciones_por_usuario"),
+
+
+    path('estadisticaPresenracion/', views.ver_notificaciones_por_usuario, name="ver_notificaciones_por_usuario"),
+
 ]
