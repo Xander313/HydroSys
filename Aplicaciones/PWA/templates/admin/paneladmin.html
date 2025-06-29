@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Asegúrate de tener tu CSS -->
+</head>
+<body>
+    <h1>Panel de Administración</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <h2>Lista de Usuarios Registrados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Correo</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.correoUsuario }}</td>
+                <td>{{ usuario.nombreUsuario }}</td>
+                <td>
+                    <a href="{% url 'editar_usuario' usuario.id %}">Editar</a>
+                    <a href="{% url 'eliminar_usuario' usuario.id %}">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Asignar Sensor a Usuario</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="usuario">Seleccionar Usuario:</label>
+        <select name="usuario" id="usuario" required>
+            {% for usuario in usuarios %}
+                <option value="{{ usuario.id }}">{{ usuario.correoUsuario }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="sensor">Seleccionar Sensor:</label>
+        <select name="sensor" id="sensor" required>
+            {% for sensor in sensores %}
+                <option value="{{ sensor.id }}">{{ sensor.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="ubicacion">Ubicación del Sensor:</label>
+        <input type="text" name="ubicacion" id="ubicacion" required>
+
+        <button type="submit">Asignar Sensor</button>
+    </form>
+
+    <h2>Asignaciones Actuales</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Sensor</th>
+                <th>Ubicación</th>
+                <th>Fecha de Asignación</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asignacion in asignaciones %}
+                <tr>
+                    <td>{{ asignacion.usuario.correoUsuario }}</td>
+                    <td>{{ asignacion.sensor.nombre }}</td>
+                    <td>{{ asignacion.ubicacionSensor }}</td>
+                    <td>{{ asignacion.fechaAsignacion }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
