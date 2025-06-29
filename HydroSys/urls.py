@@ -22,6 +22,8 @@ urlpatterns = [
     path('controlador/', include('Aplicaciones.ControladorCentral.urls')),
     path('', include('Aplicaciones.PWA.urls')),
     path('usuario/', include('Aplicaciones.Usuario.urls')),
+    path('usuarioSensor/', include('Aplicaciones.UsuarioSensor.urls')),  # Incluye las URLs de UsuarioSensor
+
 
     path('limiteUsuario/', include('Aplicaciones.LimiteUsuario.urls')),
     path('notificaciones/', include('Aplicaciones.Notificaciones.urls')),
