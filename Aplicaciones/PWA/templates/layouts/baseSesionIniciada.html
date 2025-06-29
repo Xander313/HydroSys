@@ -64,7 +64,7 @@
                     </button>
                 </form>
 
-                <a href="{% url 'cerrar_sesion' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
+                <a href="#" onclick="confirm()"><i class="fa-solid fa-right-from-bracket"></i></a>
             </div>
 
         
@@ -76,6 +76,42 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register("{% static 'pwa/js/serviceworker.js' %}");
         }
+    </script>
+
+
+    {% if messages %}
+    {% for message in messages %}
+        <script>
+        Swal.fire({
+
+            title: "{% if message.tags == 'error' %}¡ERROR!{% else %}¡ÉXITO!{% endif %}",
+            
+            text: "{{ message }}",
+
+            icon: "{% if message.tags == 'error' %}error{% else %}success{% endif %}"
+
+        });
+        </script>
+    {% endfor %}
+    {% endif %}
+
+    <script>
+    function confirm() {
+        Swal.fire({
+            title: "CONFIRMACIÓN",
+            text: "¿Está seguro de cerrar la sesión?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, cerrar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{% url 'cerrar_sesion' %}";
+            }
+        });
+    }
     </script>
 
 </body>

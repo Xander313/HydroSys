@@ -32,6 +32,12 @@ main{
 
 }
 
+body{
+    height: 100vh;
+    width: 100%;
+    border: 1px solid black;
+}
+
 /*
 .contenedorMain{
     border: 1px solid black;

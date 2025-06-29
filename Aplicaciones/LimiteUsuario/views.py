@@ -14,6 +14,7 @@ from django.utils import timezone
 
 
 def presentar_limite_usuario(request, id):
+    usuario_id = request.session['usuario_id']
     usuario = get_object_or_404(Usuario, pk=id)
     sensores_asignados = UsuarioSensor.objects.filter(usuario=usuario)
 
@@ -45,7 +46,7 @@ def presentar_limite_usuario(request, id):
 
     return render(request, 'LimiteUsuario/configuraciones.html', {
         'sensores': sensores_con_config,
-        'usuario_id': usuario.id,
+        'usuario_id': usuario.id
     })
 
 
@@ -97,6 +98,7 @@ def crearNuevoUsuarioSesor(request, id):
             tiempoMinutos=tiempo_minutos
         )
 
+        messages.success(request, 'Sensor asignado correctamente.')
         return redirect('presentar_limite_usuario', id=usuario.id)
 
     return redirect('presentar_limite_usuario', id=usuario.id)
@@ -163,5 +165,5 @@ def eliminar_usuario_sensor(request, id):
 
     usuario_sensor.delete()
 
-    messages.success(request, "Sensor y configuraciones asociadas eliminadas correctamente.")
+    messages.success(request, "Sensor y datos asociadas eliminadas correctamente.")
     return redirect('presentar_limite_usuario', id=usuario_id)

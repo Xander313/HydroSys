@@ -1,7 +1,7 @@
 {
     "name": "HydroSys",
     "short_name": "HydroSys",
-    "start_url": "/usuario/sesionIniciada/",
+    "start_url": "/usuario/login",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#02fcfc",
