@@ -209,6 +209,8 @@ def recibir_datos_esp32(request):
         sensor_id = data.get('sensor_id')
         consumo = data.get('consumoLitro')
 
+        print(sensor_id, "         ",consumo)
+
         if not sensor_id or consumo is None:
             return JsonResponse({'error': 'Faltan datos'}, status=400)
 
