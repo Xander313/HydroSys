@@ -44,10 +44,15 @@
         </div>
     </div>
 </div>
+{% empty %}
+<div class="contenedorVacio">
+    <div class="mensajeVacio">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>No hay sensores registrados aún.</p>
+    </div>
+</div>
 
 {% endfor %}
-
-
 
 
 <!--
@@ -85,12 +90,20 @@
             <label for="tiempo">Tiempo de generación de alertas (minutos):</label>
             <input type="text" step="0.01" name="tiempo" id="tiempo_editar" required>
 
-            <button type="submit">Enviar</button>
+            <button type="submit">Enviar datos</button>
             <button type="button" onclick="document.getElementById('modal').style.display='none'">Cancelar</button>
         </form>
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+            const faded = document.querySelectorAll(".fade");
+            faded.forEach(el => el.classList.remove("fade"));
+        }, 600);
+    });
+</script>
 
 <script>
 function abrirModalAgregar(usuarioId) {

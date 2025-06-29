@@ -25,6 +25,14 @@
                 style="padding: 10px 20px; border: none; background-color: #3498db; color: white; border-radius: 8px; cursor: pointer;">
                 Sensor {{ sensor.sensor.nombreSensor }} - {{ sensor.ubicacionSensor }}
             </button>
+        {% empty %}
+        <div class="contenedorVacio">
+            <div class="mensajeVacio">
+                <i class="fa-solid fa-circle-info"></i>
+                <p>No hay sensores registrados aún.</p>
+            </div>
+        </div>
+
         {% endfor %}
     </div>
 </div>
@@ -32,6 +40,7 @@
 <div id="notificaciones-contenedor">
     <p class="tituloNotificaciones">🔔 Aquí se mostrarán las notificaciones del sensor seleccionado.</p>
 </div>
+
 
 <!-- Botón para activar sonido -->
 <button id="activarSonidoBtn" style="display: none;">🔔 Activar Sonidos</button>

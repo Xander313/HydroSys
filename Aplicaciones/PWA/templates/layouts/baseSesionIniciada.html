@@ -47,19 +47,28 @@
 </head>
 <body>
     <header>
-        <h1 class="tituloCentral">HydroSys 💧 {% block seccion %}{% endblock %}</h1>
+        <h1 class="tituloCentral titleFade">HydroSys 💧 {% block seccion %}{% endblock %}</h1>
     </header>
-    <main>
-        <div class="mainContent">
-            {% block content %}
+    <main class="fade">
+            <div class="contenedorMain">        
+                {% block content %}
 
-            {% endblock %}
-        </div>
-        <div class="mainButtons">
-            <!--
-            <a href=""><i class="fa-solid fa-arrow-left"></i></a>-->
-            <a href="{% url 'cerrar_sesion' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
-        </div>
+                {% endblock %}
+            </div>
+            <div class="mainButtons">
+                <form action="{% url 'menuCentral' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="usuario_id" value="{{ usuario_id }}">
+                    <button class="butonRegresar" type="submit" class="btn-regresar">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                </form>
+
+                <a href="{% url 'cerrar_sesion' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
+            </div>
+
+        
+
     </main>
 
 

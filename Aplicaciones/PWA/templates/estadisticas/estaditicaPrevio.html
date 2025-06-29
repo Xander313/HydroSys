@@ -34,6 +34,14 @@
         </div>
     </div>
 </div>
+{% empty %}
+<div class="contenedorVacio">
+    <div class="mensajeVacio">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>No hay sensores registrados aún.</p>
+    </div>
+</div>
+
 
 {% endfor %}
 
@@ -52,6 +60,14 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+            const faded = document.querySelectorAll(".fade");
+            faded.forEach(el => el.classList.remove("fade"));
+        }, 600);
+    });
+</script>
 
 
 

@@ -6,9 +6,10 @@
 
 
 #notificaciones-contenedor{
-    height: 100%;
+    height: 80%;
     overflow-y: auto;
     width: 50%;
+    margin: auto;
 }
 
 
@@ -20,8 +21,42 @@
 
 }
 
+.sensor-selector
+{
+    margin: auto;
+    width: 100%;
+    max-width: 500px;
+}
+/*para los mensajes vacios*/
+.contenedorVacio {
+    margin-top: 40px;
+    text-align: center;
+    color: #777;
+}
+
+.mensajeVacio {
+    background-color: #f4f4f4;
+    border: 1px dashed #bbb;
+    padding: 20px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.mensajeVacio i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #5a9bd4;
+}
+
+
 @media screen and (max-width: 600px) {
     #notificaciones-contenedor {
-        width: 100%;
+        width: 95%;
+        margin: auto;
+        height: 80vh;
+    }
+    .tituloNotificaciones{
+        padding: 20px;
     }
 }
+

@@ -9,12 +9,14 @@ from Aplicaciones.UsuarioSensor.models import UsuarioSensor
 
 
 def ver_notificaciones_por_usuario(request, id):
+    usuario_id = request.session['usuario_id']
     usuario = get_object_or_404(Usuario, pk=id)
     sensores = UsuarioSensor.objects.filter(usuario=usuario)
     
     return render(request, 'Notificaciones/panelNotificaciones.html', {
         'usuario': usuario,
         'sensores': sensores,
+        'usuario_id': usuario_id
     })
 
 
@@ -35,6 +37,7 @@ def obtener_notificaciones_sensor(request, sensor_id):
 
 
 def estadisticaPresenracion(request, id):
+    
     usuario = get_object_or_404(Usuario, pk=id)
     sensores_asignados = UsuarioSensor.objects.filter(usuario=usuario)
 

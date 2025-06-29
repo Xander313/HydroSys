@@ -23,7 +23,7 @@ def login_view(request):
             usuario = Usuario.objects.get(correoUsuario=correo)
             if check_password(password, usuario.passwordUsuario):
                 request.session['usuario_id'] = usuario.id
-                return redirect('menuCentral')  # Redirige al menú central para usuarios
+                return render(request, 'Usuario/menucentral.html', {'usuario_id': usuario.id})
             else:
                 messages.error(request, 'Contraseña incorrecta')
         except Usuario.DoesNotExist:
@@ -86,4 +86,10 @@ def perfil_usuario(request):
 
     
 def menuCentral(request):
-    return render(request, 'Usuario/menuCentral.html')
+    if request.method == 'POST':
+        usuario_id = request.POST.get('usuario_id')
+        request.session['usuario_id'] = usuario_id
+    else:
+        usuario_id = request.session.get('usuario_id')
+
+    return render(request, 'Usuario/menuCentral.html', {'usuario_id': usuario_id})
