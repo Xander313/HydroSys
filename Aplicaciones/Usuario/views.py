@@ -58,6 +58,27 @@ def registro(request):
         return redirect('verify_email')  # Redirigir a la página de verificación
     return render(request, 'iniciarSesion/login.html', {'show_register': True})
 
+def verify_email(request):
+    if request.method == 'POST':
+        verification_code = request.POST.get('verification_code')
+        if verification_code == str(request.session.get('verification_code')):
+            correo = request.session.get('correo')
+            password = request.session.get('password')  # <-- Cambia aquí
+            # Guardar el usuario en la base de datos
+            if not Usuario.objects.filter(correoUsuario=correo).exists():
+                usuario = Usuario(
+                    nombreUsuario=correo.split('@')[0],
+                    correoUsuario=correo,
+                    passwordUsuario=make_password(password)
+                )
+                usuario.save()
+                messages.success(request, 'Registro exitoso. Ahora puedes iniciar sesión.')
+            else:
+                messages.info(request, 'El usuario ya existe. Inicia sesión.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Código de verificación incorrecto. Intenta de nuevo.')
+    return render(request, 'iniciarSesion/verify.html')
 
 # no tocar
 def perfil_usuario(request):
