@@ -10,20 +10,11 @@ from Aplicaciones.TipoMensaje.models import TipoMensaje
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Sum
-from django.utils.timezone import localtime
 from datetime import date
 from django.utils.timezone import now
-from datetime import timezone as dt_timezone
-
-
 from datetime import datetime, time
-from django.db.models import Sum
 from django.utils.timezone import localtime, make_aware, localdate
 from datetime import datetime, timedelta
-from Aplicaciones.UsuarioSensor.models import UsuarioSensor
-from datetime import datetime, time, timezone as dt_timezone
-from django.utils import timezone
-
 from datetime import datetime, time, timedelta, timezone as dt_timezone
 from django.utils import timezone
 

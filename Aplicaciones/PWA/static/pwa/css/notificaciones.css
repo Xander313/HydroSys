@@ -1,0 +1,27 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+#notificaciones-contenedor{
+    height: 100%;
+    overflow-y: auto;
+    width: 50%;
+}
+
+
+.tituloNotificaciones{
+    text-align: center;
+    align-content: center;
+    margin: auto;
+    height: 100%;
+
+}
+
+@media screen and (max-width: 600px) {
+    #notificaciones-contenedor {
+        width: 100%;
+    }
+}

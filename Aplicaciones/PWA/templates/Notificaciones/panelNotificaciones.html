@@ -9,6 +9,7 @@
 
 
 {% block linksCss %}
+<link rel="stylesheet" href="{% static 'pwa/css/notificaciones.css' %}">
 {% endblock %}
 
 
@@ -29,7 +30,7 @@
 </div>
 
 <div id="notificaciones-contenedor">
-    <p>🔔 Aquí se mostrarán las notificaciones del sensor seleccionado.</p>
+    <p class="tituloNotificaciones">🔔 Aquí se mostrarán las notificaciones del sensor seleccionado.</p>
 </div>
 
 <!-- Botón para activar sonido -->
@@ -85,7 +86,7 @@
             if (sensorSeleccionado) {
                 mostrarNotificaciones(sensorSeleccionado);
             }
-        }, 60000); // cada 60 segundos
+        }, 60000); 
     }
 
     function mostrarNotificaciones(sensorId) {
@@ -95,16 +96,15 @@
             .then(response => response.json())
             .then(data => {
                 const contenedor = document.getElementById("notificaciones-contenedor");
-                contenedor.innerHTML = ""; // Limpia anteriores
+                contenedor.innerHTML = ""; 
 
                 if (data.notificaciones.length === 0) {
                     contenedor.innerHTML = "<p>No hay notificaciones para este sensor.</p>";
                     return;
                 }
 
-                // 🔊 Reproducir sonido SIEMPRE que haya al menos una notificación
                 const audio = document.getElementById("audioNotificacion");
-                audio.pause(); // Reinicia por si acaso
+                audio.pause(); 
                 audio.currentTime = 0;
                 audio.play().catch(e => console.warn("No se pudo reproducir sonido:", e));
 

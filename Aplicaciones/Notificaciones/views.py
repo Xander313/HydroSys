@@ -25,7 +25,7 @@ def obtener_notificaciones_sensor(request, sensor_id):
     data = [
         {
             'mensaje': n.mensaje,
-            'fechaEnvio': localtime(n.fechaEnvio).strftime("%Y-%m-%d %H:%M"),  # <- convierte a hora local
+            'fechaEnvio': localtime(n.fechaEnvio).strftime("%Y-%m-%d %H:%M"), 
             'tipo': n.tipoMensaje.tipoAlerta
         }
         for n in notificaciones

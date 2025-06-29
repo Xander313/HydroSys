@@ -8,12 +8,60 @@
 .mainContent{
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
-    width: 450px;
+    width: 80%;
     gap: 10px;
-
+    margin-top: 10px;
+    align-items: center;
 }
 .sutitulo{
     color: aqua;
     font-family: inherit;
+}
+
+header{
+    width: 100%;
+    text-align: center;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 90vh;
+    border: 1px solid black;
+
+}
+
+.tituloCentral{
+    font-family: 'Montserrat';
+    padding: 10px;
+    
+}
+
+.mainButtons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: right; 
+    padding: 10px 20px;
+    z-index: 999; 
+}
+
+
+.mainButtons a {
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 15px;
+    border-radius: 100%;
+    background-color: rgb(190, 4, 4);
+    box-shadow: 0 0 10px 0 rgb(190, 4, 4);
+}
+
+
+@media screen and (max-width: 600px) {
+    .tituloCentral{
+        font-size: 1.3rem;
+    }
 }
