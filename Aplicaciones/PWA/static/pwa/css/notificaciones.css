@@ -6,7 +6,7 @@
 
 
 #notificaciones-contenedor{
-    height: 100vh;
+    max-height: 100vh;
     overflow-y: auto;
     width: 50%;
     margin: auto;
@@ -18,15 +18,32 @@
     align-content: center;
     margin: auto;
     height: 50%;
-    border: 1px solid black;
 
 }
+
+
+.sensoresLugares{
+    display: flex; 
+    flex-direction: row;
+    gap: 10px;
+    max-width: 90%;
+    overflow-x: auto;
+    margin: auto;
+}
+
+
+
+
 
 .sensor-selector
 {
     margin: auto;
     width: 100%;
     max-width: 500px;
+}
+.sensor-selector h3
+{
+    text-align: center;
 }
 /*para los mensajes vacios*/
 .contenedorVacio {
@@ -54,10 +71,18 @@
     #notificaciones-contenedor {
         width: 95%;
         margin: auto;
-        height: 80vh;
+        height: 100%;
     }
     .tituloNotificaciones{
         padding: 20px;
     }
+
+
+    .sensoresLugares button{
+        width: 500px;
+        height: auto;
+
+    }
+
 }
 

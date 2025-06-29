@@ -18,7 +18,7 @@
 
 <div class="sensor-selector" style="margin-bottom: 20px;">
     <h3>📡 Selecciona un sensor:</h3>
-    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <div class="sensoresLugares">
         {% for sensor in sensores %}
             <button 
                 onclick="seleccionarSensor('{{ sensor.id }}')" 
