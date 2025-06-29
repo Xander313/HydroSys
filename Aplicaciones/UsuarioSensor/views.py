@@ -4,6 +4,8 @@ from .models import UsuarioSensor
 from Aplicaciones.Usuario.models import Usuario
 from Aplicaciones.Sensor.models import Sensor
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+
 
 def panel_admin(request):
     if not request.session.get('es_admin'):
@@ -40,12 +42,20 @@ def eliminar_usuario(request, usuario_id):
     messages.success(request, 'Usuario eliminado exitosamente.')
     return redirect('panel_admin')
 
+
+
+
 def editar_usuario(request, usuario_id):
     usuario = get_object_or_404(Usuario, id=usuario_id)
     if request.method == 'POST':
-        usuario.correoUsuario = request.POST.get('correo')
-        usuario.nombreUsuario = request.POST.get('nombre')
+        correo = request.POST.get('correo')
+        nombre = request.POST.get('nombre')
+        password = request.POST.get('password')
+        usuario.correoUsuario = correo         # <--- CAMBIA ESTO
+        usuario.nombreUsuario = nombre         # <--- Y ESTO
+        if password:
+            usuario.passwordUsuario = make_password(password)  # <--- Y ESTO
         usuario.save()
-        messages.success(request, 'Usuario actualizado exitosamente.')
+        messages.success(request, 'Usuario actualizado correctamente.')
         return redirect('panel_admin')
     return render(request, 'admin/editar_usuario.html', {'usuario': usuario})
