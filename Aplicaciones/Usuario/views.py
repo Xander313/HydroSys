@@ -34,28 +34,27 @@ def login_view(request):
 
 def registro(request):
     if request.method == 'POST':
+        nombre = request.POST.get('nombreUsuario')  # <-- Nuevo
         correo = request.POST.get('correoUsuario')
         password = request.POST.get('passwordUsuario')
         
-        # Generar un código de verificación
         verification_code = random.randint(100000, 999999)
         
-        # Enviar el correo de verificación
         send_mail(
             'Código de Verificación',
             f'Tu código de verificación es: {verification_code}',
-            'tu_correo@example.com',  # Cambia esto por tu correo
+            'tu_correo@example.com',
             [correo],
             fail_silently=False,
         )
         
-        # Guardar el código en la sesión para verificarlo después
         request.session['verification_code'] = verification_code
         request.session['correo'] = correo
         request.session['password'] = password
+        request.session['nombre'] = nombre  # <-- Nuevo
         
         messages.success(request, 'Se ha enviado un código de verificación a tu correo electrónico.')
-        return redirect('verify_email')  # Redirigir a la página de verificación
+        return redirect('verify_email')
     return render(request, 'iniciarSesion/login.html', {'show_register': True})
 
 def verify_email(request):
@@ -63,11 +62,11 @@ def verify_email(request):
         verification_code = request.POST.get('verification_code')
         if verification_code == str(request.session.get('verification_code')):
             correo = request.session.get('correo')
-            password = request.session.get('password')  # <-- Cambia aquí
-            # Guardar el usuario en la base de datos
+            password = request.session.get('password')
+            nombre = request.session.get('nombre')  # <-- Nuevo
             if not Usuario.objects.filter(correoUsuario=correo).exists():
                 usuario = Usuario(
-                    nombreUsuario=correo.split('@')[0],
+                    nombreUsuario=nombre,  # <-- Cambiado
                     correoUsuario=correo,
                     passwordUsuario=make_password(password)
                 )

@@ -119,7 +119,6 @@
 </head>
 <body>
     <div class="auth-container">
-        <!-- Formulario de Login -->
         <div id="login-form" class="form-container">
             <h2 class="form-title">Iniciar Sesión</h2>
             
@@ -147,7 +146,6 @@
             </div>
         </div>
         
-        <!-- Formulario de Registro -->
         <div id="register-form" class="form-container hidden">
             <h2 class="form-title">Registro de Usuario</h2>
             
@@ -159,6 +157,10 @@
             
             <form method="post" action="{% url 'registro' %}" id="register-form">
                 {% csrf_token %}
+                <div class="form-group">
+                    <label for="regNombreUsuario">Nombre</label>
+                    <input type="text" id="regNombreUsuario" name="nombreUsuario" required>
+                </div>
                 <div class="form-group">
                     <label for="regCorreoUsuario">Correo Electrónico</label>
                     <input type="email" id="regCorreoUsuario" name="correoUsuario" required>
@@ -178,7 +180,6 @@
             </div>
         </div>
 
-        <!-- Paso de Verificación -->
         <div id="verify-form" class="form-container hidden">
             <h2 class="form-title">Verifica tu correo</h2>
             <div class="alert alert-info">
