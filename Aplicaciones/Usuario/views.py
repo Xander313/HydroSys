@@ -17,7 +17,7 @@ def login_view(request):
         # Verificación especial para admin
         if correo == 'admin' and password == '1234':
             request.session['es_admin'] = True
-            return redirect('menuCentral')  # Redirige al menú central para admin
+            return redirect('panel_admin')  # Redirige al menú central para admin
         
         try:
             usuario = Usuario.objects.get(correoUsuario=correo)
