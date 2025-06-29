@@ -1,4 +1,6 @@
+{% extends 'layouts/baseSesionIniciada.html' %}
 {% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,7 +16,10 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.1/css/buttons.dataTables.min.css">
 </head>
 <body class="bg-light">
+    
+
     <div class="container py-4">
+        
         <h1 class="text-center mb-4"><i class="fa-solid fa-user-shield"></i> Panel de Administración</h1>
 
         <!-- Mensajes con SweetAlert -->
@@ -180,3 +185,6 @@
     </script>
 </body>
 </html>
+{% endblock %}
+
+
