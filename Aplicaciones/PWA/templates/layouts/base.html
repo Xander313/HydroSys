@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="{% static 'pwa/manifest.json' %}?v=2">
+    <link rel="manifest" href="{% static 'pwa/manifest.json' %}?v=8">
 
     <meta name="theme-color" content="#02fcfc">
 
@@ -47,7 +47,24 @@
 
 </head>
 <body>
+    
+
+    <script>
+        function activarPantallaCompleta() {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        }
+    }
+
+    </script>
+
     <header>
+    <button onclick="activarPantallaCompleta()">Activar pantalla completa</button>
         <h1 style="font-family: 'Montserrat';">HydroSys 💧 {% block seccion %}{% endblock %}</h1>
     </header>
     <main>
@@ -59,8 +76,11 @@
 
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register("{% static 'pwa/js/serviceworker.js' %}");
+        navigator.serviceWorker.register("{% static 'pwa/js/serviceworker.js' %}")
+            .then(reg => console.log("✅ SW registrado:", reg))
+            .catch(err => console.error("❌ Error al registrar SW", err));
         }
+
     </script>
 
 
