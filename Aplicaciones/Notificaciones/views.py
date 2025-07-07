@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from Aplicaciones.Usuario.models import Usuario
 from django.http import JsonResponse
 from Aplicaciones.Notificaciones.models import Notificacion
 from django.utils.timezone import localtime
 from Aplicaciones.ConsumoHistorico.models import ConsumoHistorico
 from Aplicaciones.UsuarioSensor.models import UsuarioSensor
-
+from django.contrib import messages
 
 
 def ver_notificaciones_por_usuario(request, id):
@@ -98,3 +98,15 @@ def reporte_consumo_pie(request, sensor_id):
         "dias": dias_es,
         "consumos": consumos
     })
+
+
+
+def eliminar_notificacion(request, id):
+    notificaciones = Notificacion.objects.filter(id=id)
+    if not notificaciones.exists():
+        messages.error(request, 'Notificación no encontrada.')
+        return redirect('panel_admin')
+    notificacion = notificaciones.first()
+    notificacion.delete()
+    messages.success(request, 'Notificación eliminada correctamente.')
+    return redirect('panel_admin')
