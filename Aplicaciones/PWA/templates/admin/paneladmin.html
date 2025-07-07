@@ -211,6 +211,7 @@
                         <th>Consumo</th>
                         <th>Fecha Corte</th>
                         <th>UsuarioSensor</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -220,6 +221,14 @@
                         <td>{{ c.consumoDinamico }}</td>
                         <td>{{ c.fechaCorte }}</td>
                         <td>{{ c.usuarioSensorId }}</td>
+                        <td>
+                            <a href="{% url 'editar_consumo_dinamico' c.consumoDinamicoId %}" class="btn btn-primary btn-sm mb-1">
+                                <i class="fa-solid fa-pen-to-square"></i> Editar
+                            </a>
+                            <a href="{% url 'eliminar_consumo_dinamico' c.consumoDinamicoId %}" class="btn btn-danger btn-sm delete-button mb-1">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
