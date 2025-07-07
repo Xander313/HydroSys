@@ -320,6 +320,7 @@
                         <th>Descripción</th>
                         <th>Fecha Cambio</th>
                         <th>Usuario</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -330,12 +331,16 @@
                         <td>{{ log.descripcion }}</td>
                         <td>{{ log.fechaCambio }}</td>
                         <td>{{ log.usuarioId }}</td>
+                        <td>
+                            <a href="{% url 'eliminar_log_usuario' log.logUsuarioId %}" class="btn btn-danger btn-sm delete-button mb-1">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-
 
         <h2 class="mb-3 mt-5"><i class="fa-solid fa-bell"></i> Notificaciones</h2>
         <div class="table-responsive mb-4">
