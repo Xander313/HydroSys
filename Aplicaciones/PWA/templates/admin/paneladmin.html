@@ -167,6 +167,7 @@
             </table>
         </div>
 
+        <!-- Tabla Consumo Estático-->
         <h2 class="mb-3 mt-5"><i class="fa-solid fa-gauge"></i> Consumo Estático</h2>
         <div class="table-responsive mb-4">
             <table id="tabla-estatico" class="table table-striped table-bordered align-middle">
@@ -175,22 +176,22 @@
                         <th>ID</th>
                         <th>Consumo</th>
                         <th>Fecha Corte</th>
-                        <th>Usuario</th>
+                        <th>UsuarioSensor</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for c in consumos_estaticos %}
                     <tr>
-                        <td>{{ c.consumoEstaticoid }}</td>
+                        <td>{{ c.id }}</td>
                         <td>{{ c.consumoEstatico }}</td>
                         <td>{{ c.fechaCorte }}</td>
-                        <td>{{ c.usuarioid }}</td>
+                        <td>{{ c.usuarioSensor }}</td>
                         <td>
-                            <a href="{% url 'editar_consumo_estatico' c.consumoEstaticoid %}" class="btn btn-primary btn-sm mb-1">
+                            <a href="{% url 'editar_consumo_estatico' c.id %}" class="btn btn-primary btn-sm mb-1">
                                 <i class="fa-solid fa-pen-to-square"></i> Editar
                             </a>
-                            <a href="{% url 'eliminar_consumo_estatico' c.consumoEstaticoid %}" class="btn btn-danger btn-sm delete-button mb-1">
+                            <a href="{% url 'eliminar_consumo_estatico' c.id %}" class="btn btn-danger btn-sm delete-button mb-1">
                                 <i class="fa-solid fa-trash"></i> Eliminar
                             </a>
                         </td>
@@ -199,7 +200,6 @@
                 </tbody>
             </table>
         </div>
-
 
 
         <h2 class="mb-3 mt-5"><i class="fa-solid fa-bolt"></i> Consumo Dinámico</h2>
