@@ -342,7 +342,7 @@
             </table>
         </div>
 
-        
+
         <h2 class="mb-3 mt-5"><i class="fa-solid fa-bell"></i> Notificaciones</h2>
         <div class="table-responsive mb-4">
             <table id="tabla-notificaciones" class="table table-striped table-bordered align-middle">
@@ -387,6 +387,7 @@
                         <th>ID</th>
                         <th>Tipo Alerta</th>
                         <th>Mensaje Default</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -395,12 +396,16 @@
                         <td>{{ t.tipoMensajeId }}</td>
                         <td>{{ t.tipoAlerta }}</td>
                         <td>{{ t.mensaje_default }}</td>
+                        <td>
+                            <a href="{% url 'eliminar_tipo_mensaje' t.tipoMensajeId %}" class="btn btn-danger btn-sm delete-button mb-1">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-
 
 
     </div>
