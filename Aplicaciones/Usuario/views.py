@@ -92,4 +92,4 @@ def menuCentral(request):
     else:
         usuario_id = request.session.get('usuario_id')
 
-    return render(request, 'Usuario/menuCentral.html', {'usuario_id': usuario_id})
+    return render(request, 'Usuario/menucentral.html', {'usuario_id': usuario_id})
