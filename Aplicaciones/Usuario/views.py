@@ -97,4 +97,4 @@ def menuCentral(request):
         print("ID del usuario desde POST: ", usuario_id)
 
 
-    return render(request, 'Usuario/menuCentral.html', {'usuario_id': usuario_id})
+    return render(request, 'Usuario/menucentral.html', {'usuario_id': usuario_id})
