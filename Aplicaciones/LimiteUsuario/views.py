@@ -52,7 +52,9 @@ def presentar_limite_usuario(request, id):
 
 
 def crearNuevoUsuarioSesor(request, id):
+    print("🚀 Iniciando creación de nuevo usuario sensor...", id)
     usuario = get_object_or_404(Usuario, pk=id)
+    print(f"👤 Usuario encontrado: {usuario.nombreUsuario} (ID: {usuario.id})")
 
     if request.method == 'POST':
         sensor_id = request.POST.get('sensor_id')

@@ -7,7 +7,9 @@ urlpatterns = [
     path('notificaciones/sensor/<int:id>/', views.ver_notificaciones_por_usuario, name="ver_notificaciones_por_usuario"),
 
 
-
+    path('notificaciones/', views.lista_notificaciones, name='lista_notificaciones'),
+    path('notificaciones/editar/<int:id>/', views.editar_notificacion, name='editar_notificacion'),
+    path('notificaciones/eliminar/<int:id>/', views.eliminar_notificacion, name='eliminar_notificacion'),
 
 
     path('estadistica/<id>', views.estadisticaPresenracion, name="estadisticaPresenracion"),
@@ -17,7 +19,6 @@ urlpatterns = [
 
     path("reporte/consumo/pie/<int:sensor_id>/", views.reporte_consumo_pie, name="reporte_consumo_pie"),
 
-    path('eliminar_notificacion/<int:id>/', views.eliminar_notificacion, name='eliminar_notificacion'),
 
 
 

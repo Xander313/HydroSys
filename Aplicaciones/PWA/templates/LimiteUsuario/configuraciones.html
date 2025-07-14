@@ -70,25 +70,25 @@
 <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#00000099;">
     <div class="divPrincipal" style="background:white; margin:auto auto; padding:20px; width:30%; border-radius:10px; position:relative; height: 90%;">
         <h3 id="modal-title">Asignar nuevo sensor</h3>
-        <form class="agregarNuevoSensor" id="sensorForm" method="POST" data-usuario-id="{{ usuario_id }}" action="{% url 'crearNuevoUsuarioSesor' 0 %}">
+        <form class="agregarNuevoSensor" id="sensorForm" method="POST" data-usuario-id="{{ usuario_id }}" validate="validate_campos" action="{% url 'crearNuevoUsuarioSesor' 0 %}">
             {% csrf_token %}
-            <label for="sensor">Identificador único del sensor:</label>
-            <input type="text" name="sensor_id" id="sensor_id_input" required>
+            <label for="sensor">Número de medidor:</label>
+            <input type="number" name="sensor_id" id="sensor_id_input">
 
             <label for="ubicacion">Ubicación donde estará el sensor:</label>
-            <input type="text" name="ubicacion" id="ubicacion_editar" required>
+            <input type="text" name="ubicacion" id="ubicacion_editar">
 
             <label for="medicionBase">Medición base:</label>
-            <input type="text" step="0.01" name="medicionBase" id="medicion_editar" required>
+            <input type="number" step="0.01" name="medicionBase" id="medicion_editar">
 
             <label for="limite">Límite Diario (Litros):</label>
-            <input type="text" step="0.01" name="limiteDiario" id="limite_editar" required>
+            <input type="number" step="0.01" name="limiteDiario" id="limite_editar">
 
             <label for="umbral">Límite máximo de consumo (Litros):</label>
-            <input type="text" step="0.01" name="umbralAlerta" id="umbral_editar" required>
+            <input type="number" step="0.01" name="umbralAlerta" id="umbral_editar">
 
             <label for="tiempo">Tiempo de generación de alertas (minutos):</label>
-            <input type="text" step="0.01" name="tiempo" id="tiempo_editar" required>
+            <input type="" step="0.01" name="tiempo" id="tiempo_editar">
 
             <button type="submit">Enviar datos</button>
             <button type="button" onclick="document.getElementById('modal').style.display='none'">Cancelar</button>
@@ -162,6 +162,77 @@ function abrirModalEditar(sensor) {
             }
         });
     }
+</script>
+
+<script>
+    $("#validate_campos").validate({
+        rules:{
+            "sensor_id_input": {
+                required: true,
+                minlength: 1,
+                number: true
+
+            },
+            "ubicacion_editar": {
+                required: true,
+                minlength: 1,
+                pattern: /^[^\d]*$/
+            },
+
+            "medicion_editar": {
+                required: true,
+                number: true
+            },
+
+            "limite_editar": {
+                required: true,
+                number: true
+            },
+
+            "umbral_editar": {
+                required: true,
+                number: true
+            },
+
+            "tiempo_editar": {
+                required: true,
+                number: true
+            }
+
+
+        },
+        messages:{
+            "sensor_id_input": {
+                required: "Campo obligatorio",
+                minlength: "No valido",
+                number: "Solo numeros en este campo"
+            },
+            "ubicacion_editar": {
+                required: "Campo obligatorio",
+                minlength: "No valido",
+                pattern: "Caracteres no aceptados"
+            },
+            "medicion_editar": {
+                required: "Campo obligatorio",
+                minlength: "No valido",
+            },
+            "limite_editar": {
+                required: "Campo obligatorio",
+                minlength: "No valido",
+            },
+            "umbral_editar": {
+                required: "Campo obligatorio",
+                minlength: "No valido",
+            },
+            
+            "tiempo_editar": {
+                required: "Campo obligatorio",
+                minlength: "No valido",
+            }
+
+        }
+    });
+
 </script>
 
 

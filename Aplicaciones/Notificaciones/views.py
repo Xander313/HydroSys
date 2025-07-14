@@ -7,6 +7,9 @@ from Aplicaciones.ConsumoHistorico.models import ConsumoHistorico
 from Aplicaciones.UsuarioSensor.models import UsuarioSensor
 from django.contrib import messages
 
+def lista_notificaciones(request):
+    notificaciones = Notificacion.objects.select_related('usuarioSensor', 'tipoMensaje').order_by('-fechaEnvio')
+    return render(request, 'admin/notificaciones.html', {'notificaciones': notificaciones})
 
 def ver_notificaciones_por_usuario(request, id):
     usuario_id = request.session['usuario_id']
@@ -110,3 +113,29 @@ def eliminar_notificacion(request, id):
     notificacion.delete()
     messages.success(request, 'Notificación eliminada correctamente.')
     return redirect('panel_admin')
+
+
+def editar_notificacion(request, id):
+    notificacion = get_object_or_404(Notificacion, id=id)
+    if request.method == 'POST':
+        notificacion.mensaje = request.POST.get('mensaje')
+        notificacion.estado = 'estado' in request.POST
+        notificacion.save()
+        messages.success(request, 'Notificación actualizada correctamente.')
+        return redirect('lista_notificaciones')
+    return render(request, 'admin/editar_notificacion.html', {'notificacion': notificacion})
+
+from django.http import JsonResponse
+from django.utils.timezone import localtime
+
+def obtener_notificaciones_sensor(request, sensor_id):
+    notificaciones = Notificacion.objects.filter(usuarioSensor__id=sensor_id).order_by('-fechaEnvio')
+    data = [
+        {
+            'mensaje': n.mensaje,
+            'fechaEnvio': localtime(n.fechaEnvio).strftime("%Y-%m-%d %H:%M"),
+            'tipo': n.tipoMensaje.tipoAlerta
+        }
+        for n in notificaciones
+    ]
+    return JsonResponse({'notificaciones': data})

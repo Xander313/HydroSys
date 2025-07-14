@@ -1,0 +1,18 @@
+{% extends 'layouts/baseSesionIniciada.html' %}
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4"><i class="fa-solid fa-pen"></i> Editar Notificación</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="mensaje" class="form-label">Mensaje:</label>
+            <textarea name="mensaje" id="mensaje" class="form-control" required>{{ notificacion.mensaje }}</textarea>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="estado" id="estado" class="form-check-input" {% if notificacion.estado %}checked{% endif %}>
+            <label for="estado" class="form-check-label">Activa</label>
+        </div>
+        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+    </form>
+</div>
+{% endblock %}

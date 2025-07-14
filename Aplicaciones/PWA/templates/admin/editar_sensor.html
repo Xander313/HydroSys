@@ -11,21 +11,25 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="mb-3">
+                        <label for="usuario_id" class="form-label"><i class="fa-solid fa-user"></i> Usuario:</label>
+                        <select name="usuario_id" id="usuario_id" class="form-control" required onchange="mostrarNombreUsuario()">
+                            {% for usuario in usuarios %}
+                                <option value="{{ usuario.id }}" {% if usuario.id == sensor.usuario.id %}selected{% endif %}>{{ usuario.id }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <div id="nombreUsuarioBox" class="alert alert-info" style="display:none;">
+                            <span id="nombreUsuario"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="sensorID" class="form-label">ID:</label>
                         <input type="number" name="sensorID" id="sensorID" class="form-control" value="{{ sensor.sensorID }}" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="nombreSensor" class="form-label">Nombre:</label>
                         <input type="text" name="nombreSensor" id="nombreSensor" class="form-control" value="{{ sensor.nombreSensor }}" required>
-                    </div>
-                    <!-- Los campos tipo y ubicacion se dejan pero no afectan el modelo -->
-                    <div class="mb-3">
-                        <label for="tipo" class="form-label">Tipo:</label>
-                        <input type="text" name="tipo" id="tipo" class="form-control" value="{{ sensor.tipo|default_if_none:'' }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="ubicacion" class="form-label">Ubicación:</label>
-                        <input type="text" name="ubicacion" id="ubicacion" class="form-control" value="{{ sensor.ubicacion|default_if_none:'' }}">
                     </div>
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">
@@ -37,4 +41,26 @@
         </div>
     </div>
 </div>
+<script>
+    // Diccionario de usuarios para mostrar el nombre
+    const usuarios = {
+        {% for usuario in usuarios %}
+            "{{ usuario.id }}": "{{ usuario.nombreUsuario }}",
+        {% endfor %}
+    };
+    function mostrarNombreUsuario() {
+        var select = document.getElementById('usuario_id');
+        var nombreBox = document.getElementById('nombreUsuarioBox');
+        var nombreSpan = document.getElementById('nombreUsuario');
+        var id = select.value;
+        if (usuarios[id]) {
+            nombreSpan.textContent = usuarios[id];
+            nombreBox.style.display = 'block';
+        } else {
+            nombreBox.style.display = 'none';
+        }
+    }
+    // Mostrar el nombre del usuario seleccionado al cargar la página
+    document.addEventListener('DOMContentLoaded', mostrarNombreUsuario);
+</script>
 {% endblock %}
